@@ -193,3 +193,28 @@ function gallery() {
   if (ph) ph.innerHTML = GALLERY.photos.map(p => '<figure><img src="' + p.src + '" alt="' + p.alt + '" loading="lazy"></figure>').join('');
 }
 chrome(); build(); wire(); reviews(); reviewForm(); gallery();
+
+
+/* Page-to-page transition: a Gifted car drives across, then the next page opens */
+(function () {
+  const car = '<svg class="gocar" viewBox="0 0 230 100" aria-hidden="true"><ellipse cx="116" cy="88" rx="96" ry="5" fill="rgba(0,0,0,.35)"/>' +
+    '<path d="M12 70V54q0-7 9-10l32-7q10-19 30-20h46q20 0 32 18l34 7q12 3 12 13v15z" fill="#0b0f1a"/>' +
+    '<path d="M62 38q8-13 22-14h24v14zM114 24h20q15 1 24 14h-44z" fill="#a9cdee"/>' +
+    '<text x="60" y="58" font-family="Poppins,Arial,sans-serif" font-weight="700" font-size="14" fill="#fff">Gifted</text>' +
+    '<rect x="212" y="50" width="10" height="6" rx="3" fill="#F5B81C"/><rect x="8" y="52" width="6" height="8" rx="2" fill="#d33"/>' +
+    '<g class="wh" style="transform-origin:54px 74px"><circle cx="54" cy="74" r="15" fill="#05070c"/><circle cx="54" cy="74" r="9" fill="#F5B81C"/><path d="M54 66v16M46 74h16" stroke="#8a6a0c" stroke-width="2"/></g>' +
+    '<g class="wh" style="transform-origin:174px 74px"><circle cx="174" cy="74" r="15" fill="#05070c"/><circle cx="174" cy="74" r="9" fill="#F5B81C"/><path d="M174 66v16M166 74h16" stroke="#8a6a0c" stroke-width="2"/></g></svg>';
+  const go = document.createElement('div'); go.id = 'go'; go.setAttribute('aria-hidden', 'true');
+  go.innerHTML = '<div class="goroad"></div>' + car; document.body.appendChild(go);
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.addEventListener('click', (e) => {
+    if (reduce || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest && e.target.closest('a[href]'); if (!a || a.target || a.hasAttribute('download')) return;
+    const u = new URL(a.href, location.href);
+    if (u.origin !== location.origin || !/^https?:$/.test(u.protocol)) return;
+    if (u.pathname === location.pathname && u.search === location.search) return;
+    e.preventDefault(); document.documentElement.classList.add('leaving');
+    setTimeout(() => { location.href = u.href; }, 800);
+  });
+  window.addEventListener('pageshow', () => document.documentElement.classList.remove('leaving'));
+})();

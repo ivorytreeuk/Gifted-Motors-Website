@@ -111,7 +111,6 @@ h2{font-size:clamp(26px,4.5vw,38px);font-weight:700}
 .contact .cta{margin-top:22px}
 
 .links a[aria-current=page]{background:var(--navy2)}
-.hero-art{width:100%;max-width:560px;justify-self:center}
 .illu{display:block;width:100%;height:auto;filter:drop-shadow(0 18px 32px rgba(0,0,0,.35))}
 .pagehead{background:radial-gradient(900px 300px at 85% 0,#1B3F7F 0,transparent 60%),var(--navy);color:#fff;padding:48px 0 44px}
 .pagehead h1{font-size:clamp(30px,5.5vw,46px)}
@@ -157,8 +156,6 @@ h2{font-size:clamp(26px,4.5vw,38px);font-weight:700}
 .grid>.empty{grid-column:1/-1}
 
 
-.hero-art img{width:100%;height:auto;display:block;border-radius:18px;box-shadow:0 20px 44px rgba(0,0,0,.4);border:3px solid rgba(245,184,28,.9)}
-@media(min-width:900px){.hero-art{max-width:640px}}
 
 /* Awards */
 .award{margin-top:26px;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(14,42,91,.08)}
@@ -203,3 +200,45 @@ h2{font-size:clamp(26px,4.5vw,38px);font-weight:700}
 .phgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
 .phgrid figure{margin:0;border-radius:14px;overflow:hidden;background:#fff}
 .phgrid img{width:100%;display:block}
+
+
+/* hero: photo fills the section, text sits on it */
+.hero{position:relative;background:var(--navy);min-height:780px;display:flex;align-items:flex-start}
+.hero-bg{position:absolute;left:0;right:0;bottom:0;width:100%;height:58%;object-fit:cover;object-position:58% 55%}
+.hero .cta .btn{padding-left:18px;padding-right:18px;font-size:15px}.hero .cta{gap:10px;flex-wrap:nowrap}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(14,42,91,1) 0,rgba(14,42,91,1) 40%,rgba(14,42,91,.55) 52%,rgba(14,42,91,0) 68%)}
+.hero .hero-in{position:relative;z-index:2;display:block;padding-top:40px;padding-bottom:36px;width:100%}
+.hero-copy{padding-bottom:0}
+@media(min-width:900px){
+  .hero{min-height:640px;align-items:center}
+  .hero .cta{flex-wrap:wrap}
+  .hero::before{background:linear-gradient(90deg,rgba(14,42,91,.97) 0,rgba(14,42,91,.9) 34%,rgba(14,42,91,.45) 60%,rgba(14,42,91,.05) 85%)}
+  .hero .hero-in{padding-top:70px;padding-bottom:70px}.hero-copy{max-width:600px}
+  .hero-bg{top:0;height:100%;object-position:70% 55%}
+}
+.hero h1,.hero .lead,.hero .ticks{text-shadow:0 2px 14px rgba(8,22,50,.55)}
+
+/* opening splash */
+#splash{position:fixed;inset:0;z-index:10000;background:var(--navy);display:flex;align-items:center;justify-content:center;animation:splashout .5s ease 1.9s forwards}
+.nosplash #splash{display:none}
+.splash-in{display:grid;justify-items:center;gap:16px;animation:splashin .8s ease both}
+.splash-in img{width:min(62vw,280px);height:auto}
+.splash-bar{height:4px;width:0;border-radius:2px;background:var(--yellow);animation:splashbar 1.2s ease .5s forwards}
+.splash-tag{color:#c9d6ee;font-size:13px;letter-spacing:.22em;text-transform:uppercase;opacity:0;animation:splashtag .6s ease 1s forwards}
+@keyframes splashin{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+@keyframes splashbar{to{width:min(52vw,200px)}}
+@keyframes splashtag{to{opacity:1}}
+@keyframes splashout{to{opacity:0;visibility:hidden}}
+
+/* page transition */
+body{animation:pagein .4s ease both}
+@keyframes pagein{from{opacity:0}to{opacity:1}}
+#go{position:fixed;inset:0;z-index:9999;background:var(--navy);opacity:0;pointer-events:none;transition:opacity .18s ease;overflow:hidden}
+html.leaving #go{opacity:1;pointer-events:auto}
+.goroad{position:absolute;left:0;right:0;top:calc(50% + 28px);height:3px;background:repeating-linear-gradient(90deg,rgba(245,184,28,.85) 0 28px,transparent 28px 56px);opacity:.8}
+.gocar{position:absolute;top:calc(50% - 74px);left:0;width:190px;transform:translateX(-220px)}
+html.leaving .gocar{animation:godrive .78s cubic-bezier(.45,0,.55,1) .05s forwards}
+html.leaving .gocar .wh{animation:gospin .4s linear infinite}
+@keyframes godrive{to{transform:translateX(calc(100vw + 30px))}}
+@keyframes gospin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){#splash{animation-duration:.01s;animation-delay:.3s}body{animation:none}.splash-in,.splash-bar,.splash-tag{animation:none;opacity:1}.splash-bar{width:200px}}
