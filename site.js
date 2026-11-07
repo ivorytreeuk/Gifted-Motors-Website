@@ -204,7 +204,7 @@ chrome(); build(); wire(); reviews(); reviewForm(); gallery();
     '<rect x="212" y="50" width="10" height="6" rx="3" fill="#F5B81C"/><rect x="8" y="52" width="6" height="8" rx="2" fill="#d33"/>' +
     '<g class="wh" style="transform-origin:54px 74px"><circle cx="54" cy="74" r="15" fill="#05070c"/><circle cx="54" cy="74" r="9" fill="#F5B81C"/><path d="M54 66v16M46 74h16" stroke="#8a6a0c" stroke-width="2"/></g>' +
     '<g class="wh" style="transform-origin:174px 74px"><circle cx="174" cy="74" r="15" fill="#05070c"/><circle cx="174" cy="74" r="9" fill="#F5B81C"/><path d="M174 66v16M166 74h16" stroke="#8a6a0c" stroke-width="2"/></g></svg>';
-  const go = document.createElement('div'); go.id = 'go'; go.setAttribute('aria-hidden', 'true');
+  const go = document.createElement('div'); go.id = 'go'; go.setAttribute('aria-hidden', 'true'); go.style.cssText = 'position:fixed;left:0;top:0;width:100%;height:100%;visibility:hidden;opacity:0;pointer-events:none';
   go.innerHTML = '<div class="goroad"></div>' + car; document.body.appendChild(go);
   const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.addEventListener('click', (e) => {
