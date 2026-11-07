@@ -49,9 +49,9 @@ function build() {
         <a class="btn full" href="book.html?car=${encodeURIComponent(c.name)}">Book this car</a></div></article>`).join(''));
   put('sold', SOLD.map((s) => `<figure class="soldcard"><div class="soldph"><img src="${esc(s.photo)}" alt="${esc(s.name)} sold by Gifted Motors" loading="lazy">${s.baked ? '' : '<span class="soldtag">Sold</span>'}</div></figure>`).join(''));
   put('accolades', ACCOLADES.map((a) => `<article class="award">
-      <div class="award-photos">${a.photos.map((p) => `<img src="${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy">`).join('')}</div>
-      <div class="card award-text"><span class="badge">${esc(a.from)}</span><h3>${esc(a.title)}</h3><p class="when">${esc(a.date)}</p>
-        ${a.text.split('\n\n').map((t) => `<p>${esc(t)}</p>`).join('')}<p class="fine" style="text-align:left">${esc(a.source)}</p></div></article>`).join(''));
+      <header class="award-head"><span class="award-by">Awarded by</span><span class="award-from">${esc(a.from)}</span><h3>${esc(a.title)}</h3><p class="when">${esc(a.date)}</p></header>
+      <div class="award-photos"><figure class="ap cert"><img src="${esc(a.photos[0].src)}" alt="${esc(a.photos[0].alt)}" loading="lazy"></figure>${a.photos.slice(1).map((p) => `<figure class="ap"><img src="${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy"></figure>`).join('')}</div>
+      <div class="award-text">${a.text.split('\n\n').map((t, i, all) => `<p${i === all.length - 1 ? ' class="sign"' : ''}>${esc(t)}</p>`).join('')}<p class="fine">${esc(a.source)}</p></div></article>`).join(''));
   put('deals-list', DEALS.map((d) => `<div class="card tile"><h3>${esc(d.title)}</h3><p>${esc(d.text)}</p></div>`).join(''));
   if (!DEALS.length && $('deals')) $('deals').hidden = true;
   put('svc', SERVICES.map((s) => `<div class="card tile"><div class="ic">${svg(s.icon)}</div><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join(''));
