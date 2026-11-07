@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book a vehicle | Gifted Motors</title>
+<meta name="description" content="Send a booking request to Gifted Motors. We call you to confirm. Pay by Airtel Money or before you collect.">
+<meta name="theme-color" content="#0E2A5B">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main data-page="book">
+<section class="pagehead"><div class="wrap"><p class="eyebrow">Book a vehicle</p><h1>Send us your booking request</h1><p class="lead">Fill in the form and we will call you to confirm availability and the price. You pay once the booking is confirmed.</p></div></section>
+<section class="sec"><div class="wrap two">
+  <div>
+    <ol class="steps">
+      <li><b>1. Send your request.</b> It takes about a minute.</li>
+      <li><b>2. We call you.</b> We confirm the vehicle, dates and price.</li>
+      <li><b>3. Pay to reserve.</b> By Airtel Money, or before you collect the vehicle.</li>
+      <li><b>4. Collect and go.</b> Bring your ID and driving licence.</li>
+    </ol>
+    <div class="pay" id="paybox"></div>
+  </div>
+  <form class="card form" id="bf" novalidate>
+    <div class="field"><label for="vehicle">Which vehicle?</label><select id="vehicle"></select></div>
+    <div class="row2">
+      <div class="field"><label for="from">Pick-up date</label><input id="from" type="date"></div>
+      <div class="field"><label for="to">Return date</label><input id="to" type="date"></div>
+    </div>
+    <div class="field"><label for="place">Pick-up place</label><input id="place" type="text" placeholder="e.g. Woodlands, or the airport" autocomplete="off"></div>
+    <div class="row2">
+      <div class="field"><label for="name">Your name</label><input id="name" type="text" autocomplete="name" placeholder="First and last name"></div>
+      <div class="field"><label for="phone">Phone number</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+260 97 123 4567"></div>
+    </div>
+    <div class="field"><label for="email">Email <span class="opt">(optional)</span></label><input id="email" type="email" autocomplete="email" placeholder="you@example.com"></div>
+    <div class="row2">
+      <div class="field"><label for="driver">Driver</label><select id="driver"><option>Self-drive</option><option>With a driver</option><option>Not sure</option></select></div>
+      <div class="field"><label for="pay">How will you pay?</label><select id="pay"><option>Airtel Money</option><option>Pay before collecting the vehicle</option><option>Not sure yet</option></select></div>
+    </div>
+    <div class="field"><label for="notes">Anything else? <span class="opt">(optional)</span></label><textarea id="notes" rows="3" maxlength="400" placeholder="Number of passengers, trip details, questions"></textarea></div>
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input id="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+    <div id="bmsg"></div>
+    <button class="btn wide" type="submit" id="bsend">Send booking request</button>
+    <p class="fine">Sending a request does not charge you anything. We will call you to confirm.</p>
+  </form>
+</div></section>
+</main>
+<div id="site-footer"></div>
+<script src="site-data.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
