@@ -246,3 +246,6 @@ html.leaving .gocar .wh{animation:gospin .4s linear infinite}
 @keyframes godrive{to{transform:translateX(calc(100vw + 30px))}}
 @keyframes gospin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){#splash{animation-duration:.01s;animation-delay:.3s}body{animation:none}.splash-in,.splash-bar,.splash-tag{animation:none;opacity:1}.splash-bar{width:200px}}
+
+.hero-stage::after{content:"";position:absolute;z-index:0;left:6%;right:6%;bottom:1%;height:7%;border-radius:50%;background:rgba(5,12,30,.45);filter:blur(10px)}
+.hero picture{z-index:1}
