@@ -18,9 +18,9 @@ const SITE = {
 
   // Paste each social media link between the quotes. Empty ones are hidden automatically.
   social: {
-    facebook: '',
-    instagram: '',
-    tiktok: '',
+    facebook: 'https://www.facebook.com/share/19kdvxnm6g/',
+    instagram: 'https://www.instagram.com/gifted_motors_zm',
+    tiktok: 'https://www.tiktok.com/@gifted.motors',
     whatsappChannel: '',
     youtube: '',
     x: ''
@@ -65,4 +65,28 @@ const SOON = [
   { title: 'Corporate bookings',   text: 'Monthly accounts and invoices for companies and organisations.' },
   { title: 'Long-term hire',       text: 'Monthly and yearly vehicle plans.' },
   { title: 'Online card payments', text: 'Pay by card on the website.' }
+];
+
+// Recently sold. Add a line for each sold car. "baked: true" means the photo already has "Sold" written on it.
+const SOLD = [
+  { name: 'Honda Fit', note: 'Sold',  photo: 'img/sold-fit-brown.jpg', baked: true },
+  { name: 'Honda Fit', note: 'Sold',  photo: 'img/sold-fit-gold.jpg',  baked: true },
+  { name: 'Honda Fit', note: 'Sold',  photo: 'img/sold-fit-blue.jpg',  baked: false },
+  { name: 'Honda Fit', note: 'Sold',  photo: 'img/sold-fit-black.jpg', baked: false }
+];
+
+// Awards and recognition shown on the Reviews page.
+const ACCOLADES = [
+  {
+    title: 'Outstanding Customer Award',
+    from: 'SBT Co., Ltd',
+    date: 'Presented 1 February 2026 for Fiscal Year 2025',
+    text: 'GIFTED MOTORS is truly honoured and grateful to receive the Outstanding Customer Award from SBT.\n\nThis recognition means a lot to us and motivates us to continue striving for excellence, building strong relationships, and delivering the best service to our valued customers.\n\nA big thank you to SBT for this recognition and for appreciating our commitment. We look forward to strengthening our partnership and achieving even greater milestones together.\n\nGIFTED MOTORS: Driven by Excellence!',
+    source: 'From the Gifted Motors Facebook page, 9 October',
+    photos: [
+      { src: 'img/award-certificate.jpg', alt: 'The Outstanding Customer Award certificate presented to Gifted Motors by SBT Co., Ltd' },
+      { src: 'img/award-handover.jpg', alt: 'The owner of Gifted Motors receiving the award from the SBT representative' },
+      { src: 'img/award-group.jpg', alt: 'The owner of Gifted Motors with the SBT representative and a colleague at the Gifted Motors office' }
+    ]
+  }
 ];

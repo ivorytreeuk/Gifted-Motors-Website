@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What people think | Gifted Motors</title>
+<meta name="description" content="Customer reviews and awards for Gifted Motors in Zambia. Leave your own review.">
+<meta name="theme-color" content="#0E2A5B">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main data-page="reviews">
+<section class="pagehead"><div class="wrap"><p class="eyebrow">Reviews and awards</p><h1>What people think of Gifted Motors</h1><p class="lead">Recognition from our partners and words from our customers.</p></div></section>
+<section class="sec"><div class="wrap"><p class="eyebrow dark">Awards</p><h2>Recognition</h2><div id="accolades"></div></div></section>
+<section class="sec alt"><div class="wrap">
+  <p class="eyebrow dark">Customer reviews</p><h2>From our customers</h2>
+  <div class="grid three" id="reviews"><div class="empty">Loading reviews…</div></div>
+</div></section>
+<section class="sec"><div class="wrap two">
+  <div><p class="eyebrow dark">Share your experience</p><h2>Leave a review</h2>
+  <p class="sub">Hired a car or used one of our services? Tell others what it was like. We read every review before it goes on the website.</p></div>
+  <form class="card form" id="rf" novalidate>
+    <div class="field"><label for="rname">Your name</label><input id="rname" type="text" autocomplete="name" placeholder="First name and initial is fine" maxlength="60"></div>
+    <div class="row2">
+      <div class="field"><label for="rrating">Your rating</label><select id="rrating"><option value="">Choose</option><option value="5">5 stars: Excellent</option><option value="4">4 stars: Good</option><option value="3">3 stars: Okay</option><option value="2">2 stars: Poor</option><option value="1">1 star: Very poor</option></select></div>
+      <div class="field"><label for="rabout">What was it about?</label><select id="rabout"><option>Car hire</option><option>Import and clearance</option><option>Buying a car</option><option>Selling a car</option><option>Something else</option></select></div>
+    </div>
+    <div class="field"><label for="rtext">Your review</label><textarea id="rtext" rows="5" maxlength="600" placeholder="What went well? What could be better?"></textarea></div>
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input id="rweb" type="text" tabindex="-1" autocomplete="off"></label></div>
+    <div id="rmsg"></div>
+    <button class="btn wide" type="submit" id="rsend">Send review</button>
+    <p class="fine">Reviews appear on the website after we have checked them.</p>
+  </form>
+</div></section>
+</main>
+<div id="site-footer"></div>
+<script src="site-data.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

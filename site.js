@@ -15,9 +15,15 @@ const svg = (n) => `<svg viewBox="0 0 24 24" width="26" height="26" fill="curren
 const uid = () => (window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
 const isoDate = (d) => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 
+function socialLinks() {
+  const names = { facebook: 'Facebook', instagram: 'Instagram', tiktok: 'TikTok', whatsappChannel: 'WhatsApp channel', youtube: 'YouTube', x: 'X' };
+  return Object.keys(names).filter((k) => /^https?:\/\//.test(SITE.social[k] || '')).map((k) => [names[k], SITE.social[k]]);
+}
+const stars = (n) => '<span class="stars" role="img" aria-label="' + n + ' out of 5 stars">' + '★'.repeat(n) + '☆'.repeat(5 - n) + '</span>';
+
 function chrome() {
   const page = (document.querySelector('[data-page]') || {}).dataset ? document.querySelector('[data-page]').dataset.page : '';
-  const L = [['home', 'index.html', 'Home'], ['cars', 'cars.html', 'Our cars'], ['services', 'services.html', 'Services'], ['pay', 'pay.html', 'Make a payment'], ['contact', 'contact.html', 'Contact']];
+  const L = [['home', 'index.html', 'Home'], ['cars', 'cars.html', 'Our cars'], ['services', 'services.html', 'Services'], ['reviews', 'reviews.html', 'Reviews'], ['pay', 'pay.html', 'Make a payment'], ['contact', 'contact.html', 'Contact']];
   $('site-header').outerHTML = `<header class="nav"><div class="wrap nav-in">
     <a href="index.html" class="brand" aria-label="Gifted Motors home"><img src="logo.png" alt="Gifted Motors"></a>
     <nav class="links" id="links" aria-label="Main">${L.map((l) => `<a href="${l[1]}" ${page === l[0] ? 'aria-current="page"' : ''}>${l[2]}</a>`).join('')}</nav>
@@ -26,7 +32,7 @@ function chrome() {
   </div></header>`;
   $('site-footer').outerHTML = `<footer class="foot"><div class="wrap foot-in"><div><img src="logo.png" alt="Gifted Motors"><p>&copy; ${new Date().getFullYear()} Gifted Motors Limited<br>${esc(SITE.address)}</p></div>
     <div><p><b>Call</b><br><a href="tel:+${SITE.phoneLink}">${esc(SITE.phone)}</a></p>${SITE.email ? `<p><a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a></p>` : ''}</div>
-    <div><p><b>Open</b><br>${SITE.hours.map((h) => esc(h[0]) + ': ' + esc(h[1])).join('<br>')}</p></div></div></footer>`;
+    <div><p><b>Open</b><br>${SITE.hours.map((h) => esc(h[0]) + ': ' + esc(h[1])).join('<br>')}</p><p class="foot-social">${socialLinks().map((l) => `<a href="${esc(l[1])}" target="_blank" rel="noopener">${l[0]}</a>`).join('')}</p></div></div></footer>`;
   const nav = $('links'), b = $('burger');
   b.addEventListener('click', () => { const o = nav.classList.toggle('open'); b.setAttribute('aria-expanded', o); });
 }
@@ -41,6 +47,11 @@ function build() {
         <p>${esc(c.note)}</p>
         <div class="meta"><span>${esc(c.seats)}</span><b>${c.rate ? 'K' + esc(c.rate) + ' per day' : 'Ask for the rate'}</b></div>
         <a class="btn full" href="book.html?car=${encodeURIComponent(c.name)}">Book this car</a></div></article>`).join(''));
+  put('sold', SOLD.map((s) => `<figure class="soldcard"><div class="soldph"><img src="${esc(s.photo)}" alt="${esc(s.name)} sold by Gifted Motors" loading="lazy">${s.baked ? '' : '<span class="soldtag">Sold</span>'}</div></figure>`).join(''));
+  put('accolades', ACCOLADES.map((a) => `<article class="award">
+      <div class="award-photos">${a.photos.map((p) => `<img src="${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy">`).join('')}</div>
+      <div class="card award-text"><span class="badge">${esc(a.from)}</span><h3>${esc(a.title)}</h3><p class="when">${esc(a.date)}</p>
+        ${a.text.split('\n\n').map((t) => `<p>${esc(t)}</p>`).join('')}<p class="fine" style="text-align:left">${esc(a.source)}</p></div></article>`).join(''));
   put('deals-list', DEALS.map((d) => `<div class="card tile"><h3>${esc(d.title)}</h3><p>${esc(d.text)}</p></div>`).join(''));
   if (!DEALS.length && $('deals')) $('deals').hidden = true;
   put('svc', SERVICES.map((s) => `<div class="card tile"><div class="ic">${svg(s.icon)}</div><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join(''));
@@ -52,7 +63,7 @@ function build() {
   put('callbtns', `<a class="btn" href="${tel}">Call ${esc(SITE.phone)}</a>${SITE.whatsapp ? `<a class="btn dark" href="${wa}" target="_blank" rel="noopener">WhatsApp us</a>` : ''}`);
   put('facts', `<li><span>Phone</span><a href="${tel}">${esc(SITE.phone)}</a></li><li><span>Location</span>${esc(SITE.address)}</li>${SITE.hours.map((h, i) => `<li><span>${i ? '' : 'Opening hours'}</span>${esc(h[0])}: <b>${esc(h[1])}</b></li>`).join('')}<li><span>24 hours</span>${esc(SITE.assistance)}</li>${SITE.email ? `<li><span>Email</span><a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a></li>` : ''}`);
   const names = { facebook: 'Facebook', instagram: 'Instagram', tiktok: 'TikTok', whatsappChannel: 'WhatsApp channel', youtube: 'YouTube', x: 'X' };
-  const links = Object.keys(names).filter((k) => /^https?:\/\//.test(SITE.social[k] || ''));
+  const links = socialLinks().map((l) => l[0] === l[0] ? Object.keys(names).find((k) => names[k] === l[0]) : '');
   put('social', links.length ? links.map((k) => `<a class="pill" href="${esc(SITE.social[k])}" target="_blank" rel="noopener">${names[k]}</a>`).join('') : '<p class="sub light">Our social media pages are coming soon.</p>');
   put('paybox', SITE.airtelNumber
     ? `<h3>Paying by Airtel Money</h3><p>Once we confirm your booking, send the amount to <b>${esc(SITE.airtelNumber)}</b>${SITE.airtelName ? ' (' + esc(SITE.airtelName) + ')' : ''}. Use your booking reference as the payment reference, then tell us when it is sent.</p>`
@@ -97,4 +108,41 @@ function wire() {
     }
   });
 }
-chrome(); build(); wire();
+async function reviews() {
+  const box = $('reviews');
+  if (!box) return;
+  const none = '<div class="empty">No reviews yet. Be the first to share your experience below.</div>';
+  if (!API_URL) { box.innerHTML = none; return; }
+  try {
+    const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'publicReviews' }), redirect: 'follow' });
+    const j = await res.json();
+    if (!j.ok) throw new Error('x');
+    box.innerHTML = j.reviews.length ? j.reviews.map((r) => `<figure class="card rv">${stars(r.rating)}<blockquote>${esc(r.text)}</blockquote><figcaption><b>${esc(r.name)}</b><span>${esc(r.about)}</span></figcaption></figure>`).join('') : none;
+  } catch (e) { box.innerHTML = none; }
+}
+function reviewForm() {
+  if (!$('rf')) return;
+  let clientId = uid(), sending = false;
+  $('rf').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (sending) return;
+    const v = (id) => $(id).value.trim();
+    const rv = { name: v('rname'), rating: v('rrating'), about: v('rabout'), text: v('rtext'), website: v('rweb') };
+    const err = (m) => { $('rmsg').innerHTML = `<div class="errbox" role="alert">${esc(m)}</div>`; };
+    if (rv.name.length < 2) return err('Please type your name.');
+    if (!rv.rating) return err('Please choose a star rating.');
+    if (rv.text.length < 10) return err('Please write a little more. A sentence or two is enough.');
+    if (/https?:\/\/|www\./i.test(rv.text)) return err('Please leave web links out of your review.');
+    if (!API_URL) return err('Reviews are not switched on yet.');
+    sending = true; $('rsend').disabled = true; $('rsend').textContent = 'Sending…'; $('rmsg').innerHTML = '';
+    try {
+      let res;
+      try { res = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'reviewSubmit', clientId, review: rv }), redirect: 'follow' }); }
+      catch (x) { throw new Error('We could not send your review. Please check your internet and try again.'); }
+      let j; try { j = await res.json(); } catch (x) { throw new Error('Something went wrong. Please try again.'); }
+      if (!j.ok) throw new Error(j.error || 'Something went wrong. Please try again.');
+      $('rf').innerHTML = '<div class="done"><div class="tick">✓</div><h3>Thank you</h3><p>We have your review. It will appear on this page once we have checked it.</p></div>';
+    } catch (x) { err(x.message); sending = false; $('rsend').disabled = false; $('rsend').textContent = 'Send review'; }
+  });
+}
+chrome(); build(); wire(); reviews(); reviewForm();
