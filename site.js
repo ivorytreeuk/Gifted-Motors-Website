@@ -23,7 +23,7 @@ const stars = (n) => '<span class="stars" role="img" aria-label="' + n + ' out o
 
 function chrome() {
   const page = (document.querySelector('[data-page]') || {}).dataset ? document.querySelector('[data-page]').dataset.page : '';
-  const L = [['home', 'index.html', 'Home'], ['cars', 'cars.html', 'Our cars'], ['services', 'services.html', 'Services'], ['reviews', 'reviews.html', 'Reviews'], ['pay', 'pay.html', 'Make a payment'], ['contact', 'contact.html', 'Contact']];
+  const L = [['home', 'index.html', 'Home'], ['cars', 'cars.html', 'Our cars'], ['services', 'services.html', 'Services'], ['gallery', 'gallery.html', 'Gallery'], ['reviews', 'reviews.html', 'Reviews'], ['pay', 'pay.html', 'Make a payment'], ['contact', 'contact.html', 'Contact']];
   $('site-header').outerHTML = `<header class="nav"><div class="wrap nav-in">
     <a href="index.html" class="brand" aria-label="Gifted Motors home"><img src="logo.png" alt="Gifted Motors"></a>
     <nav class="links" id="links" aria-label="Main">${L.map((l) => `<a href="${l[1]}" ${page === l[0] ? 'aria-current="page"' : ''}>${l[2]}</a>`).join('')}</nav>
@@ -145,4 +145,28 @@ function reviewForm() {
     } catch (x) { err(x.message); sending = false; $('rsend').disabled = false; $('rsend').textContent = 'Send review'; }
   });
 }
-chrome(); build(); wire(); reviews(); reviewForm();
+
+function gallery() {
+  const box = document.getElementById('gal'); if (!box || typeof GALLERY === 'undefined') return;
+  const V = GALLERY.videos; let i = 0;
+  box.innerHTML = '<div class="galmain"><video id="gv" muted playsinline autoplay preload="auto" disablepictureinpicture controlslist="nodownload noremoteplayback" aria-label="Gifted Motors gallery video"></video>' +
+    '<button class="galbtn" id="gpp" type="button" aria-label="Pause video">❚❚</button></div>' +
+    '<div class="galthumbs" id="gth">' + V.map((v, k) => '<button type="button" class="gt" data-k="' + k + '" aria-label="Play video ' + (k + 1) + '"><img src="' + v.poster + '" alt="" loading="lazy"></button>').join('') + '</div>';
+  const vid = document.getElementById('gv'), pp = document.getElementById('gpp');
+  vid.muted = true; vid.defaultMuted = true;
+  function play(k) {
+    i = (k + V.length) % V.length;
+    vid.poster = V[i].poster; vid.src = V[i].src; vid.muted = true;
+    const p = vid.play(); if (p && p.catch) p.catch(() => { pp.textContent = '▶'; pp.setAttribute('aria-label', 'Play video'); });
+    document.querySelectorAll('.gt').forEach((b, n) => b.classList.toggle('on', n === i));
+    const nx = new Image(); nx.src = V[(i + 1) % V.length].poster;
+  }
+  vid.addEventListener('ended', () => play(i + 1));
+  vid.addEventListener('playing', () => { pp.textContent = '❚❚'; pp.setAttribute('aria-label', 'Pause video'); });
+  pp.addEventListener('click', () => { if (vid.paused) { vid.play(); } else { vid.pause(); pp.textContent = '▶'; pp.setAttribute('aria-label', 'Play video'); } });
+  document.getElementById('gth').addEventListener('click', e => { const b = e.target.closest('.gt'); if (b) play(+b.dataset.k); });
+  play(0);
+  const ph = document.getElementById('photos');
+  if (ph) ph.innerHTML = GALLERY.photos.map(p => '<figure><img src="' + p.src + '" alt="' + p.alt + '" loading="lazy"></figure>').join('');
+}
+chrome(); build(); wire(); reviews(); reviewForm(); gallery();

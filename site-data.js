@@ -90,3 +90,9 @@ const ACCOLADES = [
     ]
   }
 ];
+
+/* Gallery: videos play muted, one after another, in a loop. Files are in /media */
+const GALLERY = {
+  videos: [1,2,3,4,5,6,7,8,9,10].map(n => ({ src: 'media/clip' + n + '.mp4', poster: 'media/clip' + n + '.jpg' })),
+  photos: [{ src: 'img/fit-black-livery.jpg', alt: 'Black Honda Fit with Gifted Motors branding' }]
+};
