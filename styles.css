@@ -212,9 +212,10 @@ h2{font-size:clamp(26px,4.5vw,38px);font-weight:700}
 @media(min-width:900px){
   .hero{min-height:640px;align-items:center}
   .hero .cta{flex-wrap:wrap}
-  .hero::before{background:linear-gradient(90deg,rgba(14,42,91,.97) 0,rgba(14,42,91,.9) 34%,rgba(14,42,91,.45) 60%,rgba(14,42,91,.05) 85%)}
-  .hero .hero-in{padding-top:70px;padding-bottom:70px}.hero-copy{max-width:600px}
-  .hero-bg{top:0;height:100%;object-position:70% 55%}
+  .hero::before{background:linear-gradient(90deg,var(--navy) 0,var(--navy) 36%,rgba(14,42,91,.55) 46%,rgba(14,42,91,0) 62%)}
+  .hero .hero-in{padding-top:70px;padding-bottom:70px}.hero-copy{max-width:560px}
+  .hero-bg{left:auto;right:0;top:0;width:68%;height:100%;object-position:40% 55%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28%);mask-image:linear-gradient(90deg,transparent 0,#000 28%)}
+}
 }
 .hero h1,.hero .lead,.hero .ticks{text-shadow:0 2px 14px rgba(8,22,50,.55)}
 
