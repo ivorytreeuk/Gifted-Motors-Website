@@ -148,24 +148,47 @@ function reviewForm() {
 
 function gallery() {
   const box = document.getElementById('gal'); if (!box || typeof GALLERY === 'undefined') return;
-  const V = GALLERY.videos; let i = 0;
-  box.innerHTML = '<div class="galmain"><video id="gv" muted playsinline autoplay preload="auto" disablepictureinpicture controlslist="nodownload noremoteplayback" aria-label="Gifted Motors gallery video"></video>' +
-    '<button class="galbtn" id="gpp" type="button" aria-label="Pause video">❚❚</button></div>' +
-    '<div class="galthumbs" id="gth">' + V.map((v, k) => '<button type="button" class="gt" data-k="' + k + '" aria-label="Play video ' + (k + 1) + '"><img src="' + v.poster + '" alt="" loading="lazy"></button>').join('') + '</div>';
-  const vid = document.getElementById('gv'), pp = document.getElementById('gpp');
-  vid.muted = true; vid.defaultMuted = true;
-  function play(k) {
-    i = (k + V.length) % V.length;
-    vid.poster = V[i].poster; vid.src = V[i].src; vid.muted = true;
-    const p = vid.play(); if (p && p.catch) p.catch(() => { pp.textContent = '▶'; pp.setAttribute('aria-label', 'Play video'); });
-    document.querySelectorAll('.gt').forEach((b, n) => b.classList.toggle('on', n === i));
-    const nx = new Image(); nx.src = V[(i + 1) % V.length].poster;
+  const V = GALLERY.videos; let cur = -1, timer = null;
+  box.innerHTML = '<div class="gcar"><button type="button" class="garrow prev" id="gprev" aria-label="Previous video">‹</button>' +
+    '<div class="gtrack" id="gtrack" tabindex="0" aria-label="Gallery videos. Swipe left or right.">' +
+    V.map((v, k) => '<div class="gslide" data-k="' + k + '"><video muted playsinline preload="none" poster="' + v.poster + '" disablepictureinpicture controlslist="nodownload noremoteplayback" aria-label="Gallery video ' + (k + 1) + '"></video><span class="gpause" aria-hidden="true">▶</span></div>').join('') +
+    '</div><button type="button" class="garrow next" id="gnext" aria-label="Next video">›</button></div>' +
+    '<div class="gdots" id="gdots">' + V.map((v, k) => '<button type="button" data-k="' + k + '" aria-label="Go to video ' + (k + 1) + '"></button>').join('') + '</div>' +
+    '<p class="ghint">Swipe left or right for the next video</p>';
+  const track = document.getElementById('gtrack');
+  const slides = [...track.querySelectorAll('.gslide')], dots = [...document.querySelectorAll('#gdots button')];
+  const vids = slides.map(s => s.querySelector('video'));
+  vids.forEach(v => { v.muted = true; v.defaultMuted = true; });
+  function load(k) { const v = vids[(k + V.length) % V.length]; if (!v.getAttribute('src')) { v.src = V[(k + V.length) % V.length].src; v.preload = 'auto'; } }
+  function activate(k) {
+    if (k === cur) return; cur = k;
+    vids.forEach((v, n) => { if (n !== k) { v.pause(); if (n !== (k + 1) % V.length) { /* keep neighbours loaded */ } } });
+    slides.forEach((s, n) => s.classList.toggle('on', n === k));
+    dots.forEach((d, n) => d.classList.toggle('on', n === k));
+    load(k); load(k + 1);
+    const v = vids[k]; v.currentTime = 0; v.muted = true;
+    const p = v.play(); if (p && p.catch) p.catch(() => { slides[k].classList.add('paused'); });
+    slides[k].classList.remove('paused');
   }
-  vid.addEventListener('ended', () => play(i + 1));
-  vid.addEventListener('playing', () => { pp.textContent = '❚❚'; pp.setAttribute('aria-label', 'Pause video'); });
-  pp.addEventListener('click', () => { if (vid.paused) { vid.play(); } else { vid.pause(); pp.textContent = '▶'; pp.setAttribute('aria-label', 'Play video'); } });
-  document.getElementById('gth').addEventListener('click', e => { const b = e.target.closest('.gt'); if (b) play(+b.dataset.k); });
-  play(0);
+  function go(k) { k = (k + V.length) % V.length; slides[k].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }); }
+  vids.forEach((v, k) => v.addEventListener('ended', () => go(k + 1)));
+  vids.forEach((v, k) => { v.addEventListener('pause', () => { if (k === cur && !v.ended) slides[k].classList.add('paused'); }); v.addEventListener('playing', () => slides[k].classList.remove('paused')); });
+  /* which slide is centred? */
+  function centred() {
+    const mid = track.scrollLeft + track.clientWidth / 2; let best = 0, bd = 1e9;
+    slides.forEach((s, n) => { const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid); if (d < bd) { bd = d; best = n; } });
+    return best;
+  }
+  track.addEventListener('scroll', () => { clearTimeout(timer); timer = setTimeout(() => activate(centred()), 120); }, { passive: true });
+  slides.forEach((s, k) => s.addEventListener('click', () => {
+    if (k !== cur) { go(k); return; }
+    const v = vids[k]; if (v.paused) { v.play(); } else { v.pause(); }
+  }));
+  dots.forEach(d => d.addEventListener('click', () => go(+d.dataset.k)));
+  document.getElementById('gprev').addEventListener('click', () => go(cur - 1));
+  document.getElementById('gnext').addEventListener('click', () => go(cur + 1));
+  track.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); } });
+  activate(0);
   const ph = document.getElementById('photos');
   if (ph) ph.innerHTML = GALLERY.photos.map(p => '<figure><img src="' + p.src + '" alt="' + p.alt + '" loading="lazy"></figure>').join('');
 }
