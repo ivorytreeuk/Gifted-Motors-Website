@@ -175,3 +175,6 @@ h2{font-size:clamp(26px,4.5vw,38px);font-weight:700}
 .phgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
 .phgrid figure{margin:0;border-radius:14px;overflow:hidden;background:#fff}
 .phgrid img{width:100%;display:block}
+
+.hero-art img{width:100%;height:auto;display:block;border-radius:18px;box-shadow:0 20px 44px rgba(0,0,0,.4);border:3px solid rgba(245,184,28,.9)}
+@media(min-width:900px){.hero-art{max-width:640px}}
